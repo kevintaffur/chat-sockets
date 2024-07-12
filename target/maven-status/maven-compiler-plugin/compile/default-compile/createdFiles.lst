@@ -1,0 +1,8 @@
+com\mycompany\chat\sockets\ChatServer.class
+com\mycompany\chat\sockets\Flag.class
+com\mycompany\chat\sockets\ChatService.class
+com\mycompany\chat\sockets\CHATSOCKETS.class
+com\mycompany\chat\sockets\ChatRoom.class
+com\mycompany\chat\sockets\ChatClient.class
+com\mycompany\chat\sockets\ChatClient$1OutputRunnable.class
+com\mycompany\chat\sockets\Chatter.class
