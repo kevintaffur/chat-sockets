@@ -7,62 +7,97 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
    Programa cliente del chat.
 */
 public class ChatClient
 {
-   public static void main(String[] args)
-         throws IOException
-   {
-      final int PORT = 8888;
-      final String HOST = "localhost";
-      
-      System.out.println("Bienvenido al chat room!\n");
-      System.out.println("Por favor entre su comando.");
-      System.out.println("USO:  LOGIN usuario_o_nick");
-      System.out.println("      CHAT mensaje");
-      System.out.println("      LOGOUT");
-      System.out.println("Presione ENTER para enviar su mensaje.\n");
+  private String nombre;   
+ private Socket socketCliente;
+    private final int PORT = 8888;
+    private final String HOST = "localhost";
+    private ExecutorService servicioEjecutor;
+    private BufferedReader lectorMensajes;
+    private PrintWriter escritorMensajes;
+    private interfaceSocketClient interfazSocketCliente;
+     private final Flag done = new Flag(false);
 
-      Socket s = new Socket(HOST, PORT);
-      InputStream inStream = s.getInputStream();
-      OutputStream outStream = s.getOutputStream();
-      final BufferedReader in = new BufferedReader(new InputStreamReader(inStream));
-      PrintWriter out = new PrintWriter(outStream);
-      BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+    
+    public interface interfaceSocketClient {
+        void mensajeRecibido(String mensaje);
+        void servidorCerrado();
+        void logout();
+    }
 
-      final Flag done = new Flag(false);
-      
-      class OutputRunnable implements Runnable
-      {
-         public void run()
-         {
-            try
-            {
-               while (!done.getFlag())
-               {
-                  String response = in.readLine();
-                  System.out.println(response);
-                  if (response.equals("Adios!"))
-                     done.setFlag(true);
-               }
+    public ChatClient(){
+        servicioEjecutor = Executors.newFixedThreadPool(2);
+    }
+
+    public void enviarMensajes(String mensaje) {
+        if (lectorMensajes != null) {
+            System.out.println("Enviando mensaje: " + mensaje);  
+            escritorMensajes.println(mensaje);
+        }
+    }
+
+    public void registrarMensajes(interfaceSocketClient messageSocketClient) {
+        this.interfazSocketCliente = messageSocketClient;
+    }
+
+    public void logout() {        
+        try {
+            if (socketCliente != null && !socketCliente.isClosed()) {
+                enviarMensajes("LOGOUT");
+                escritorMensajes.close();
+                lectorMensajes.close();
+                socketCliente.close();
             }
-            catch (IOException e){}
-         }
-      }
-      
-      OutputRunnable or = new OutputRunnable();
-      Thread t = new Thread(or);
-      t.start();
-      
-      while (!done.getFlag())
-      {  
-         String line = console.readLine();
-         out.println(line);
-         out.flush();
-      }
-      s.close();
-   }
+        } catch (IOException e) {
+            if (interfazSocketCliente != null) {
+            }
+        }
+    }
+
+    public void login(String nombre) throws IOException {
+        this.nombre = nombre;
+        socketCliente = new Socket(HOST, PORT);
+        System.out.print("Usuario agregado "+ nombre+"\n");
+        lectorMensajes = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
+        escritorMensajes = new PrintWriter(socketCliente.getOutputStream(), true);
+
+        accionServidor();
+    }
+
+      private void accionServidor() {
+        class OutputRunnable implements Runnable {
+            public void run() {
+                try {
+                    String mensajeDesdeServidor;
+                    while (!done.getFlag() && (mensajeDesdeServidor = lectorMensajes.readLine()) != null) {
+                        if (interfazSocketCliente != null) {
+                            interfazSocketCliente.mensajeRecibido(mensajeDesdeServidor);
+                        }
+                        
+                    }
+                } catch (IOException e) {
+                    if (interfazSocketCliente != null) {
+                        interfazSocketCliente.servidorCerrado();
+                    }
+                } finally {
+                    if (interfazSocketCliente != null) {
+                        interfazSocketCliente.logout();
+                    }
+                }
+            }
+        }
+
+        OutputRunnable or = new OutputRunnable();
+        Thread t = new Thread(or);
+        t.start();
+    }
+
 }
