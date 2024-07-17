@@ -30,60 +30,7 @@ public final class Servidor extends javax.swing.JFrame {
     private interfaceSocketServer messageSocketServer;
     private DefaultListModel<String> connectedUsersList;
     private ChatRoom chatRoom;
-    
-        public interfaceSocketServer createMessageSocketServer() {
-        return new interfaceSocketServer() {
-            @Override
-            public void unirse(String name) {
-                SwingUtilities.invokeLater(() -> {
-                    if (name != null && !name.isEmpty()) {
-                        connectedUsersList.addElement(name);
-                    }
-                    if (name != null && !name.isEmpty()) {
-                        txtAreaHConexiones.append(name + " se ha conectado.\n");
-                    }else{
-                    
-                    txtAreaHConexiones.append(" se ha conectado.\n");
-                    }
-                });
-            }
-
-            @Override
-            public void salir(String name) {
-                SwingUtilities.invokeLater(() -> {
-                     connectedUsersList.removeElement(name);
-                    if (name != null && !name.isEmpty()) {
-                        txtAreaHConexiones.append(name + " se ha desconectado.\n");
-                    }
-                });
-            }
-
-            @Override
-            public void log(String message) {
-                SwingUtilities.invokeLater(() -> {
-                    if (message != null && !message.isEmpty()) {
-                        txtAreaHConexiones.append(message + "\n");
-                    }
-                });
-            }
-            
-            @Override
-            public void HistorialMensajes(String message) {
-                SwingUtilities.invokeLater(() -> {
-                    if (message != null && !message.isEmpty()) {
-                        txtAreaHMensajes.append(message + "\n");
-                    }
-                });
-            }
-        };
-    }
-    
-    
-   
-    /**
-     * Creates new form Server
-     */
- public Servidor() {
+    public Servidor() {
    
         initComponents();
         txtAreaHConexiones.setEnabled(false);
@@ -103,6 +50,95 @@ public final class Servidor extends javax.swing.JFrame {
                 handleServerError(throwable);
             }
     }
+        public interfaceSocketServer createMessageSocketServer() {
+        return new interfaceSocketServer() {
+            @Override
+            public void join(String name) {
+                SwingUtilities.invokeLater(() -> {
+                    if (name != null && !name.isEmpty()) {
+                        connectedUsersList.addElement(name);
+                    }
+                    if (name != null && !name.isEmpty()) {
+                        txtAreaHConexiones.append(name + " se ha conectado.\n");
+                    }else{
+                    
+                    txtAreaHConexiones.append(" se ha conectado.\n");
+                    }
+                });
+            }
+
+            @Override
+            public void exit(String name) {
+                SwingUtilities.invokeLater(() -> {
+                     connectedUsersList.removeElement(name);
+                    
+                    if (name != null && !name.isEmpty()) {
+                        txtAreaHConexiones.append(name + " se ha desconectado.\n");
+                    }
+               
+                
+                        // Obtener el contenido actual del JTextArea
+        String currentText = txtAreaHMensajes.getText();
+
+        // Dividir el contenido en líneas
+        String[] lines = currentText.split("\n");
+
+        // Crear un nuevo StringBuilder para el nuevo contenido
+        StringBuilder newText = new StringBuilder();
+
+        // Recorrer las líneas y agregar todas excepto la que contiene el nombre
+        for (String line : lines) {
+            if (!line.contains(name)) {
+                newText.append(line).append("\n");
+            }
+        }
+
+        // Establecer el nuevo contenido en el JTextArea
+        txtAreaHMensajes.setText(newText.toString());
+                
+                
+                
+                
+                });
+           
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            }
+
+            @Override
+            public void log(String message) {
+                SwingUtilities.invokeLater(() -> {
+                    if (message != null && !message.isEmpty()) {
+                        txtAreaHConexiones.append(message + "\n");
+                    }
+                });
+            }
+            
+            @Override
+            public void HistorialMensajes(String message) {
+                SwingUtilities.invokeLater(() -> {
+                    if (message != null && !message.isEmpty()) {
+                        txtAreaHMensajes.append(message + "\n");
+                        
+                    }
+                });
+            }
+        };
+    }
+    
+    
+   
+    /**
+     * Creates new form Server
+     */
+ 
     
     
     private void handleServerError(Throwable throwable) {

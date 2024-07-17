@@ -23,6 +23,7 @@ public class ChatServer
         this.chatRoom = chatRoom;
         this.threadExecutor = Executors.newCachedThreadPool();
     }
+    
     public void startServer() throws IOException {
     threadExecutor.submit(() -> {
         final int PORT = 8888;

@@ -28,6 +28,7 @@ public class ChatRoom
         // Aquí envías el mensaje a todos los clientes conectados
       socketServer.HistorialMensajes(message); // Envia el mensaje al historial de mensajes del servidor
         // Resto de la lógica de broadcast
+       
     }
     public synchronized void add(ChatService cs) {
         chatters.add(cs);
@@ -35,6 +36,12 @@ public class ChatRoom
     
     public synchronized void remove(ChatService client) {
         chatters.remove(client);
+        if (socketServer != null) {
+            socketServer.exit(client.getUserName());
+        } else {
+            System.err.println("Error: serverMessageHandler is null in ChatRoom.remove()");
+        }
+        
         updateClientList();
     }
     public synchronized void broadcast(String requestor, String msg, ChatService chatService) {
@@ -46,7 +53,7 @@ public class ChatRoom
     }
     public synchronized void register(String aName, ChatService service) {
         service.putMessage(aName + " se ha unido al chat.");
-        socketServer.unirse(aName);
+        socketServer.join(aName);
     }
 
     public synchronized void leave(String aName, ChatService service) {
@@ -55,6 +62,7 @@ public class ChatRoom
                 c.putMessage(aName + " se ha desconectado.");
             }
         }
+        socketServer.exit(aName);
         updateClientList();
     }
 
