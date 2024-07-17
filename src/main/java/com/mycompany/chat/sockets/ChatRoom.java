@@ -25,9 +25,8 @@ public class ChatRoom
     }
    
    public void HistorialMensajes(String message) {
-        // Aquí envías el mensaje a todos los clientes conectados
+        // Aquí envía el mensaje a todos los clientes conectados
       socketServer.HistorialMensajes(message); // Envia el mensaje al historial de mensajes del servidor
-        // Resto de la lógica de broadcast
        
     }
     public synchronized void add(ChatService cs) {
@@ -74,7 +73,7 @@ public class ChatRoom
             }
         } else {
             System.err.println("servidorSocket es nulo en SalaChat.actualizarListaUsuarios()");
-        } // Puedes implementar lógica aquí para notificar cambios en la lista de clientes
+        }
     }
 
     
