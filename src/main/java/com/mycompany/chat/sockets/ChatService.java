@@ -84,7 +84,8 @@ public class ChatService implements Runnable
       @param line el resto de la linea del comando
       @return la respuesta a ser enviada al cliente
    */
-public String executeCommand(String command, String line) throws IOException {
+
+     public String executeCommand(String command, String line) throws IOException {
     System.out.println("Comando recibido: " + command);  // Para depuración
     System.out.println("Mensaje recibido: " + line); 
 
@@ -98,6 +99,7 @@ public String executeCommand(String command, String line) throws IOException {
         return executeInvalidCommand();
     }
 }
+
      
  private String executeLogin(String username) throws IOException {
     if (loggedIn) {

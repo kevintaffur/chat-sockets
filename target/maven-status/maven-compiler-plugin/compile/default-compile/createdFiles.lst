@@ -1,10 +1,7 @@
-Vistas\Cliente$3.class
 com\mycompany\chat\sockets\ChatService.class
-Vistas\Cliente$2.class
 com\mycompany\chat\sockets\ChatRoom.class
 Vistas\Cliente$1.class
 com\mycompany\chat\sockets\ChatClient$interfaceSocketClient.class
-com\mycompany\chat\sockets\ChatClient.class
 com\mycompany\chat\sockets\ChatClient$1OutputRunnable.class
 com\mycompany\chat\sockets\Chatter.class
 Vistas\Cliente$6.class
@@ -12,9 +9,6 @@ com\mycompany\chat\sockets\ChatServer.class
 com\mycompany\chat\sockets\Flag.class
 com\mycompany\chat\sockets\CHATSOCKETS.class
 Vistas\Cliente.class
-Vistas\Cliente$5.class
 Vistas\Servidor.class
-com\mycompany\chat\sockets\claseprueba.class
 Vistas\Servidor$1.class
-Vistas\Cliente$4.class
 com\mycompany\chat\sockets\interfaceSocketServer.class
