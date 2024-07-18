@@ -17,7 +17,7 @@ import com.mycompany.chat.sockets.ChatRoom;
 import com.mycompany.chat.sockets.ChatServer;
 import com.mycompany.chat.sockets.interfaceSocketServer;
 import javax.swing.DefaultListModel;
-
+import java.awt.Color;
 
 /**
  *
@@ -34,8 +34,14 @@ public final class Servidor extends javax.swing.JFrame {
    
         initComponents();
         txtAreaHConexiones.setEnabled(false);
+        txtAreaHMensajes.setEditable(false);
+        txtAreaHConexiones.setDisabledTextColor(Color.BLACK);
+           txtAreaHMensajes.setDisabledTextColor(Color.BLACK);
+        txtAreaHConexiones.setBackground(Color.white);
+        
         connectedUsersList = new DefaultListModel<>();
         JListUsuariosConectados.setModel(connectedUsersList);
+this.getContentPane().setBackground(Color.getHSBColor(0.5444f, 0.6126f, 0.4353f));
 
         messageSocketServer = createMessageSocketServer();
         chatRoom = new ChatRoom(messageSocketServer);
@@ -182,7 +188,7 @@ public final class Servidor extends javax.swing.JFrame {
         jScrollPane1.setViewportView(txtAreaHConexiones);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Conexiones:");
+        jLabel1.setText("Estado de conexiones:");
 
         JListUsuariosConectados.setToolTipText("");
         jScrollPane2.setViewportView(JListUsuariosConectados);
