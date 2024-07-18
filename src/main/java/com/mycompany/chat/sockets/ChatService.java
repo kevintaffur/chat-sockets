@@ -108,7 +108,7 @@ public class ChatService implements Runnable
 
     userName = username;
     chatRoom.register(userName, this);
-    chatRoom.broadcast(userName, "LOGIN", this);
+    chatRoom.broadcast("LOGIN",userName, this);
     loggedIn = true;
     return "Administrador del chat room: Hola, " + userName + ".";
 }
@@ -118,9 +118,9 @@ private String executeChat(String message) throws IOException {
         return "Administrador del chat room: Debes hacer LOGIN primero";
     }
 
-    chatRoom.broadcast(userName, message, this);
+    chatRoom.broadcast("", message, this);
     chatRoom.HistorialMensajes(message);
-    return userName + ": " + message;
+    return message;
 }
 
 private String executeLogout() throws IOException {
@@ -129,11 +129,11 @@ private String executeLogout() throws IOException {
         return "Administrador del chat room: Debes hacer LOGIN primero";
     }
 
-    chatRoom.broadcast(userName, "LOGOUT", this);
+    chatRoom.broadcast("LOGOUT",userName, this);
     chatRoom.leave(userName, this);
     loggedIn = false;
-    userName = null;
-    handleDisconnect();
+    userName = "";
+   // handleDisconnect();
     return "Adios!";
 }
 
@@ -160,7 +160,7 @@ private String executeInvalidCommand() {
     public void handleDisconnect() {
         chatRoom.leave(userName, this);
         desconectar();
-        JOptionPane.showMessageDialog(null, "El servidor está cerrado!");
+       // JOptionPane.showMessageDialog(null, "El servidor está cerrado!");
     }
 
     @Override

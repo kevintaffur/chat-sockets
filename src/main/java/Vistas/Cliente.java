@@ -5,7 +5,7 @@
 package Vistas;
 
 import com.mycompany.chat.sockets.ChatClient;
-
+import java.awt.Color;
 import com.mycompany.chat.sockets.ChatClient.interfaceSocketClient;
 import com.mycompany.chat.sockets.ChatClient.interfaceSocketClient;
 import java.awt.event.ActionEvent;
@@ -29,10 +29,11 @@ public class Cliente extends javax.swing.JFrame {
     public Cliente() {
         initComponents();
         txtPanelChat.setEnabled(false);
+        txtPanelChat.setDisabledTextColor(Color.BLACK);
         btnLogout.setEnabled(false);
         btnEnviarMensaje.setEnabled(false);
         clienteSocket = new ChatClient();
-
+ this.getContentPane().setBackground(Color.getHSBColor(0.5444f, 0.6126f, 0.4353f));
         // Agrega un KeyListener al campo de texto
         txtNombreCliente.addKeyListener(new KeyListener() {
             @Override
@@ -60,14 +61,23 @@ public class Cliente extends javax.swing.JFrame {
         String mensaje = txtMensajeCliente.getText().trim();
         String nuevoMensaje;
         if (!mensaje.isEmpty()) {
-            nuevoMensaje = txtNombreCliente.getText() + ": " + mensaje;
+            nuevoMensaje =   txtNombreCliente.getText() + ": " + mensaje;
             clienteSocket.enviarMensajes("CHAT " + nuevoMensaje);
-            txtPanelChat.setEditable(false);
+            txtPanelChat.setEditable(true);
             txtMensajeCliente.setEnabled(true);
             txtMensajeCliente.setText("");
         }
 
         System.out.print("Mensaje enviado\n");
+    }
+    
+        private void enviarMensaje1() {
+        String mensaje =  txtNombreCliente.getText() + ": " + txtMensajeCliente.getText().trim();
+         
+            clienteSocket.enviarMensajes("CHAT " + mensaje);
+            txtPanelChat.setEditable(true);
+            txtMensajeCliente.setEnabled(true);
+            txtMensajeCliente.setText("");
     }
 
 // Método para iniciar el cliente
@@ -128,7 +138,7 @@ public class Cliente extends javax.swing.JFrame {
 
             @Override
             public void logout() {
-                JOptionPane.showMessageDialog(null, "cliente desconectado del servidor!");
+                
                 limpiarInterfaz();
             }
 
@@ -158,12 +168,13 @@ public class Cliente extends javax.swing.JFrame {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(204, 204, 204));
+        setBackground(new java.awt.Color(102, 255, 153));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setText("Nombre de Usuario:");
 
+        txtNombreCliente.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtNombreCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNombreClienteActionPerformed(evt);
@@ -171,7 +182,7 @@ public class Cliente extends javax.swing.JFrame {
         });
 
         btnLogin.setBackground(new java.awt.Color(102, 255, 153));
-        btnLogin.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLogin.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnLogin.setText("Login");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,12 +190,12 @@ public class Cliente extends javax.swing.JFrame {
             }
         });
 
-        labelDescripcionCliente.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        labelDescripcionCliente.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         labelDescripcionCliente.setText("Usuario: ");
         labelDescripcionCliente.setToolTipText("");
 
         btnLogout.setBackground(new java.awt.Color(153, 255, 153));
-        btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnLogout.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnLogout.setText("Logout");
         btnLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -193,13 +204,14 @@ public class Cliente extends javax.swing.JFrame {
         });
 
         txtPanelChat.setColumns(20);
+        txtPanelChat.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         txtPanelChat.setRows(5);
         jScrollPane1.setViewportView(txtPanelChat);
 
         txtMensajeCliente.setToolTipText("");
 
         btnEnviarMensaje.setBackground(new java.awt.Color(153, 255, 153));
-        btnEnviarMensaje.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEnviarMensaje.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnEnviarMensaje.setText("Enviar");
         btnEnviarMensaje.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,47 +224,53 @@ public class Cliente extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 29, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(59, 59, 59))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(txtMensajeCliente)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEnviarMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35))))
+            .addGroup(layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(labelDescripcionCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtMensajeCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnEnviarMensaje))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnLogin)))
-                        .addGap(0, 44, Short.MAX_VALUE)))
+                        .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(9, 9, 9)
+                .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLogout)
-                    .addComponent(labelDescripcionCliente))
-                .addGap(38, 38, 38)
+                    .addComponent(labelDescripcionCliente)
+                    .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLogin))
+                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtMensajeCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEnviarMensaje))
-                .addContainerGap(76, Short.MAX_VALUE))
+                    .addComponent(btnEnviarMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38))
         );
 
         jLabel2.getAccessibleContext().setAccessibleName("labelNombreChatter");
@@ -288,6 +306,7 @@ public class Cliente extends javax.swing.JFrame {
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
         limpiarInterfaz();
+        JOptionPane.showMessageDialog(null, "cliente desconectado del servidor!");
         System.out.print("Sesion cerrada\n");
     }//GEN-LAST:event_btnLogoutActionPerformed
 
